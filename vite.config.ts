@@ -4,13 +4,12 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
-// https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
   },
-  base: mode === "production" ? "/fischair-home-comfort-web/" : "/",
+  base: "/", // Set to root for Vercel unless using a subdirectory
   plugins: [
     react(),
     mode === "development" && componentTagger(),
