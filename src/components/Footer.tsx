@@ -35,7 +35,7 @@ const Footer = () => {
             <div className="space-y-3">
               <div className="flex items-center space-x-3">
                 <Phone className="h-5 w-5 text-primary" />
-                <span>+421 XXX XXX XXX</span>
+                <span>+421 910 610 985</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="h-5 w-5 text-primary" />
@@ -43,7 +43,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center space-x-3">
                 <MapPin className="h-5 w-5 text-primary" />
-                <span>Bratislava, Slovensko</span>
+                <span>Spišská Nová Ves, Slovensko</span>
               </div>
             </div>
 
@@ -102,7 +102,7 @@ const Footer = () => {
         <div className="border-t border-background/20 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-background/60 text-sm">
-              © 2024 Fischair. Všetky práva vyhradené.
+              © 2025 Fischair. Všetky práva vyhradené.
             </div>
             <div className="flex space-x-6 text-sm">
               <a href="#" className="text-background/60 hover:text-primary transition-colors">

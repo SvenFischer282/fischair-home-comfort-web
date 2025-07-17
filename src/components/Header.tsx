@@ -1,16 +1,16 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Menu, X, Phone, Mail } from 'lucide-react';
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Menu, X, Phone, Mail } from "lucide-react";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const navItems = [
-    { label: 'Domov', href: '#home' },
-    { label: 'Služby', href: '#services' },
-    { label: 'Prečo Fischair', href: '#why-us' },
-    { label: 'Pre koho', href: '#target' },
-    { label: 'Kontakt', href: '#contact' }
+    { label: "Domov", href: "#home" },
+    { label: "Služby", href: "#services" },
+    { label: "Prečo Fischair", href: "#why-us" },
+    { label: "Pre koho", href: "#target" },
+    { label: "Kontakt", href: "#contact" },
   ];
 
   return (
@@ -20,7 +20,9 @@ const Header = () => {
           {/* Logo */}
           <div className="flex items-center">
             <h1 className="text-2xl font-bold text-primary">Fischair</h1>
-            <span className="ml-2 text-sm text-muted-foreground">Zdravé bývanie</span>
+            <span className="ml-2 text-sm text-muted-foreground">
+              Zdravé bývanie
+            </span>
           </div>
 
           {/* Desktop Navigation */}
@@ -40,9 +42,11 @@ const Header = () => {
           <div className="hidden lg:flex items-center space-x-4">
             <div className="flex items-center space-x-2 text-sm">
               <Phone className="h-4 w-4 text-primary" />
-              <span>+421 XXX XXX XXX</span>
+              <span>+421 910 610 985</span>
             </div>
-            <Button size="sm">Kontakt</Button>
+            <Button asChild size="sm">
+              <a href="#contact">Kontakt</a>
+            </Button>
           </div>
 
           {/* Mobile Menu Button */}
@@ -77,7 +81,9 @@ const Header = () => {
                   <Phone className="h-4 w-4 text-primary" />
                   <span>+421 XXX XXX XXX</span>
                 </div>
-                <Button size="sm" className="w-full">Kontakt</Button>
+                <Button size="sm" className="w-full">
+                  Kontakt
+                </Button>
               </div>
             </nav>
           </div>
