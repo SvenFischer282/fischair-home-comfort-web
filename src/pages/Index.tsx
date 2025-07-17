@@ -5,6 +5,7 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 import TargetAudience from '@/components/TargetAudience';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
+import { Toaster } from '@/components/ui/toaster';
 
 const Index = () => {
   return (
@@ -16,6 +17,7 @@ const Index = () => {
       <TargetAudience />
       <Contact />
       <Footer />
+      <Toaster />
     </div>
   );
 };

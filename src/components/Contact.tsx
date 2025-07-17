@@ -1,10 +1,89 @@
+import React, { useState } from 'react';
+import emailjs from '@emailjs/browser';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 import { Phone, Mail, MapPin, Clock, Send } from 'lucide-react';
 
 const Contact = () => {
+  const { toast } = useToast();
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    subject: 'Rekuperácia',
+    message: ''
+  });
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!formData.name || !formData.phone || !formData.email) {
+      toast({
+        title: "Chyba",
+        description: "Prosím vyplňte všetky povinné polia.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      // EmailJS configuration - you need to set these up in EmailJS dashboard
+      const serviceId = 'YOUR_SERVICE_ID'; // Replace with your EmailJS service ID
+      const templateId = 'YOUR_TEMPLATE_ID'; // Replace with your EmailJS template ID
+      const publicKey = 'YOUR_PUBLIC_KEY'; // Replace with your EmailJS public key
+
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        phone: formData.phone,
+        subject: formData.subject,
+        message: formData.message,
+        to_email: 'info@fischair.sk' // Your receiving email
+      };
+
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+
+      toast({
+        title: "Úspech!",
+        description: "Vaša správa bola úspešne odoslaná. Odpovieme vám čo najskôr."
+      });
+
+      // Reset form
+      setFormData({
+        name: '',
+        phone: '',
+        email: '',
+        subject: 'Rekuperácia',
+        message: ''
+      });
+
+    } catch (error) {
+      console.error('Error sending email:', error);
+      toast({
+        title: "Chyba",
+        description: "Nepodarilo sa odoslať správu. Skúste to prosím znovu alebo nás kontaktujte priamo.",
+        variant: "destructive"
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const contactInfo = [
     {
       icon: Phone,
@@ -107,55 +186,93 @@ const Contact = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Meno a priezvisko *
-                    </label>
-                    <Input placeholder="Vaše meno" />
+                <form onSubmit={handleSubmit}>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+                    <div>
+                      <Label htmlFor="name" className="text-sm font-medium text-foreground mb-2">
+                        Meno a priezvisko *
+                      </Label>
+                      <Input 
+                        id="name"
+                        name="name"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        placeholder="Vaše meno"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="phone" className="text-sm font-medium text-foreground mb-2">
+                        Telefón *
+                      </Label>
+                      <Input 
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder="+421 XXX XXX XXX"
+                        required
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <label className="block text-sm font-medium text-foreground mb-2">
-                      Telefón *
-                    </label>
-                    <Input placeholder="+421 XXX XXX XXX" />
+                  
+                  <div className="mb-6">
+                    <Label htmlFor="email" className="text-sm font-medium text-foreground mb-2">
+                      Email *
+                    </Label>
+                    <Input 
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="vas@email.sk"
+                      required
+                    />
                   </div>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Email *
-                  </label>
-                  <Input type="email" placeholder="vas@email.sk" />
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Predmet záujmu
-                  </label>
-                  <select className="w-full p-3 border border-input rounded-md bg-background text-foreground">
-                    <option>Rekuperácia</option>
-                    <option>Tepelné čerpadlo</option>
-                    <option>Klimatizácia</option>
-                    <option>Kombinácia riešení</option>
-                    <option>Nezáväzná konzultácia</option>
-                  </select>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-foreground mb-2">
-                    Správa
-                  </label>
-                  <Textarea 
-                    placeholder="Opíšte nám vaše potreby a požiadavky..."
-                    className="min-h-[120px]"
-                  />
-                </div>
-                
-                <Button className="w-full bg-gradient-to-r from-primary to-primary-light shadow-lg hover:shadow-xl">
-                  <Send className="mr-2 h-4 w-4" />
-                  Odoslať správu
-                </Button>
+                  
+                  <div className="mb-6">
+                    <Label htmlFor="subject" className="text-sm font-medium text-foreground mb-2">
+                      Predmet záujmu
+                    </Label>
+                    <select 
+                      id="subject"
+                      name="subject"
+                      value={formData.subject}
+                      onChange={handleInputChange}
+                      className="w-full p-3 border border-input rounded-md bg-background text-foreground"
+                    >
+                      <option value="Rekuperácia">Rekuperácia</option>
+                      <option value="Tepelné čerpadlo">Tepelné čerpadlo</option>
+                      <option value="Klimatizácia">Klimatizácia</option>
+                      <option value="Kombinácia riešení">Kombinácia riešení</option>
+                      <option value="Nezáväzná konzultácia">Nezáväzná konzultácia</option>
+                    </select>
+                  </div>
+                  
+                  <div className="mb-6">
+                    <Label htmlFor="message" className="text-sm font-medium text-foreground mb-2">
+                      Správa
+                    </Label>
+                    <Textarea 
+                      id="message"
+                      name="message"
+                      value={formData.message}
+                      onChange={handleInputChange}
+                      placeholder="Opíšte nám vaše potreby a požiadavky..."
+                      className="min-h-[120px]"
+                    />
+                  </div>
+                  
+                  <Button 
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full bg-gradient-to-r from-primary to-primary-light shadow-lg hover:shadow-xl disabled:opacity-50"
+                  >
+                    <Send className="mr-2 h-4 w-4" />
+                    {isLoading ? 'Odosielam...' : 'Odoslať správu'}
+                  </Button>
+                </form>
                 
                 <p className="text-sm text-muted-foreground text-center">
                   * Povinné polia. Vaše údaje sú v bezpečí a nebudú zdieľané s tretími stranami.
